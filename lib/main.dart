@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'viewmodel/image_picker_viewmodel.dart';
 import 'font_color_util.dart';
+//import 'dart:ui';
 
 void main() {
   runApp(const MyApp());
@@ -82,7 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   final imageData = _viewModel.images[index];
                   final fontColor = getBestFontColor(imageData.dominantColor);
                   final buttonBgColor = fontColor;
-                  final buttonTextColor = fontColor == Colors.white ? Colors.black : Colors.white;
+                  final buttonTextColor = fontColor == Colors.white
+                      ? Colors.black
+                      : Colors.white;
                   return Center(
                     child: Card(
                       shape: RoundedRectangleBorder(
@@ -99,11 +102,50 @@ class _MyHomePageState extends State<MyHomePage> {
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20),
                               ),
-                              child: Image.file(
-                                imageData.file,
-                                height: 180,
-                                width: 250,
-                                fit: BoxFit.cover,
+                              child: Stack(
+                                children: [
+                                  Image.file(
+                                    imageData.file,
+                                    height: 180,
+                                    width: 250,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: List.generate(11, (index) {
+                                            double opacity = index * 0.1;
+                                            int alpha = (opacity * 255).round();
+
+                                            return Color.fromARGB(
+                                              alpha,
+                                              (imageData.dominantColor.r * 255)
+                                                      .round() &
+                                                  0xff,
+                                              (imageData.dominantColor.g * 255)
+                                                      .round() &
+                                                  0xff,
+                                              (imageData.dominantColor.b * 255)
+                                                      .round() &
+                                                  0xff,
+                                            );
+                                          }),
+                                          stops: List.generate(
+                                            11,
+                                            (index) => index * 0.1,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             Container(
@@ -117,7 +159,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 12,
+                                ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -133,7 +178,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     const SizedBox(height: 8),
                                     Row(
                                       children: [
-                                        Icon(Icons.location_on_outlined, color: fontColor, size: 18),
+                                        Icon(
+                                          Icons.location_on_outlined,
+                                          color: fontColor,
+                                          size: 18,
+                                        ),
                                         const SizedBox(width: 6),
                                         Text(
                                           'Addis Ababa',
@@ -149,7 +198,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                     const SizedBox(height: 4),
                                     Row(
                                       children: [
-                                        Icon(Icons.watch_later_outlined, color: fontColor, size: 18),
+                                        Icon(
+                                          Icons.watch_later_outlined,
+                                          color: fontColor,
+                                          size: 18,
+                                        ),
                                         const SizedBox(width: 6),
                                         Text(
                                           '6:00 am - 8:00 pm',
@@ -164,7 +217,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     const Spacer(),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
                                       child: SizedBox(
                                         width: double.infinity,
                                         height: 32,
@@ -172,7 +227,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: buttonBgColor,
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(15),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
                                             ),
                                             elevation: 0,
                                             padding: EdgeInsets.zero,
